@@ -11,5 +11,6 @@ MutantDebuggerStonWriter >> writeObject: anObject [
 	anObject class = MutantDebugger 
 	ifFalse: [ 
 		super writeObject: anObject ]
-	ifTrue: [ self writeObject: anObject do: [ self encodeMap: #() ] ]
+	ifTrue: [ 
+		self writeObject: anObject do: [ self encodeMap: #() ] ]
 ]

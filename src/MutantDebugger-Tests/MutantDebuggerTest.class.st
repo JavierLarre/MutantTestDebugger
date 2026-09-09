@@ -15,17 +15,21 @@ Class {
 MutantDebuggerTest >> setUp [
 	super setUp.
 
-	debugger := MutantDebugger withContext: thisContext
+	debugger := MutantDebugger withContext: thisContext.
+	"debugger sender: self class >> self selector"
 ]
 
 { #category : 'tests' }
 MutantDebuggerTest >> testCompareAndDetectChanges [
 	| acc |
 	acc := BankAccount withFunds: 200.
-	debugger takeSnapshot.
 	acc withdraw: 20.
-	self assert: acc balance equals: 180.
-	self should: [ debugger compareAndDetectChanges ] raise: AssertionFailure. 
+	self assert: acc balance equals: 181.
+	"debugger takeSnapshot: 13 hasMutation: false"
+	"debugger takeSnapshot: 13 hasMutation: true"
+	"cuando tengamos para comparar, guardamos las diferencias y borramos el STON grande"
+	"self assert: acc direction houseNumber equals: 12."
+	"self assert: ((acc instVarNamed: #direction) instVarName: #houseNumber) equals: 12"
 ]
 
 { #category : 'tests' }

@@ -34,7 +34,7 @@ MutantDebugger class >> withContext: aContext [
 MutantDebugger >> compareAndDetectChanges [
 	self context: thisContext sender.
 	self assert: sender = self serializedSender.
-	self assert: temporaryVariables = (STON toString: context temporaryVariables) 
+	self assert: temporaryVariables = (MutantDebuggerSton toString: context temporaryVariables) 
 ]
 
 { #category : 'initialization' }
@@ -45,6 +45,7 @@ MutantDebugger >> context: aContext [
 { #category : 'accessing' }
 MutantDebugger >> serializedSender [
 
+	"todo: buscar método más eficiente"
 	^ MutantDebuggerSton toString: context receiver
 ]
 
@@ -62,6 +63,7 @@ MutantDebugger >> takeSender [
 
 { #category : 'api' }
 MutantDebugger >> takeSnapshot [ 
+	"tengo que recibir un mutant ID y saber si es con o sin mutante"
 	self 
 		context: thisContext sender;
 		takeSender;
