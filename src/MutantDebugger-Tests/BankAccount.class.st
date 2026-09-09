@@ -10,14 +10,22 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-BankAccount >> deposit: amount [
-	funds := funds + amount 
+BankAccount class >> withFunds: funds [
+
+	^ self new
+		deposit: funds;
+		yourself
 ]
 
 { #category : 'accessing' }
-BankAccount >> funds [
+BankAccount >> balance [
 
 	^ funds
+]
+
+{ #category : 'as yet unclassified' }
+BankAccount >> deposit: amount [
+	funds := funds + amount 
 ]
 
 { #category : 'initialization' }

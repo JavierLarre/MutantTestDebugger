@@ -19,13 +19,13 @@ BankAccountTest >> setUp [
 BankAccountTest >> testDeposit [
 
 	account deposit: 100.
-	self assert: account funds equals: 100
+	self assert: account balance equals: 100
 ]
 
 { #category : 'tests' }
 BankAccountTest >> testInitialFunds [
 
-	self assert: account funds equals: 0
+	self assert: account balance equals: 0
 ]
 
 { #category : 'tests' }
@@ -34,7 +34,7 @@ BankAccountTest >> testWithdraw [
 	account 
 		deposit: 100;
 		withdraw: 100.
-	self assert: account funds equals: 0 
+	self assert: account balance equals: 0 
 ]
 
 { #category : 'tests' }
