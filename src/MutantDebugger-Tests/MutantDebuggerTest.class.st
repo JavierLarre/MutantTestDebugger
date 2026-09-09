@@ -15,11 +15,11 @@ Class {
 MutantDebuggerTest >> setUp [
 	super setUp.
 
-	debugger := MutantDebugger new 
+	debugger := MutantDebugger withContext: thisContext
 ]
 
-{ #category : 'as yet unclassified' }
-MutantDebuggerTest >> testBankAccount [
+{ #category : 'tests' }
+MutantDebuggerTest >> testCompareAndDetectChanges [
 	| acc |
 	acc := BankAccount withFunds: 200.
 	debugger takeSnapshot.
@@ -28,7 +28,16 @@ MutantDebuggerTest >> testBankAccount [
 	self should: [ debugger compareAndDetectChanges ] raise: AssertionFailure. 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
+MutantDebuggerTest >> testSerializedSender [
+	
+	| sender |
+	sender := debugger serializedSender.
+	self 
+		assert: sender equals: (MutantDebuggerSton toString: self)
+]
+
+{ #category : 'tests' }
 MutantDebuggerTest >> testSnapshotTakesTempVariables [
 	| temp |
 	temp := 12.
@@ -37,8 +46,21 @@ MutantDebuggerTest >> testSnapshotTakesTempVariables [
 ]
 
 { #category : 'tests' }
-MutantDebuggerTest >> testTakeSnapshot [
+MutantDebuggerTest >> testStonSnapshot [
 
 	debugger takeSnapshot.
 	self assert: debugger stonSnapshot equals: (MutantDebuggerSton toString: self)
+]
+
+{ #category : 'tests' }
+MutantDebuggerTest >> testTakenSender [
+
+	| sender |
+	sender := debugger 
+		takeSender;
+		takenSender.
+	self
+		deny: sender equals: self;
+		assert: sender class equals: self class;
+		assert: sender selector equals: self selector
 ]
