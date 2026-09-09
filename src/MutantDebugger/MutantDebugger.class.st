@@ -16,6 +16,20 @@ Class {
 	#package : 'MutantDebugger'
 }
 
+{ #category : 'accessing' }
+MutantDebugger class >> uniqueInstance [
+
+	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
+]
+
+{ #category : 'instance creation' }
+MutantDebugger class >> withContext: aContext [
+
+	^ self new
+		context: aContext;
+		yourself
+]
+
 { #category : 'comparing' }
 MutantDebugger >> compareAndDetectChanges [
 	self context: thisContext sender.
