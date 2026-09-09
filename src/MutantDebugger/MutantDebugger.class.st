@@ -1,3 +1,6 @@
+"
+I take snapshots of objects before and after test execution to compare mutation differences
+"
 Class {
 	#name : 'MutantDebugger',
 	#superclass : 'Object',
@@ -6,61 +9,64 @@ Class {
 		'context',
 		'sender'
 	],
+	#classInstVars : [
+		'uniqueInstance'
+	],
 	#category : 'MutantDebugger',
 	#package : 'MutantDebugger'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'comparing' }
 MutantDebugger >> compareAndDetectChanges [
-	self setContext: thisContext sender.
+	self context: thisContext sender.
 	self assert: sender = self serializedSender.
 	self assert: temporaryVariables = (STON toString: context temporaryVariables) 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
+MutantDebugger >> context: aContext [
+	context := aContext 
+]
+
+{ #category : 'accessing' }
 MutantDebugger >> serializedSender [
 
 	^ MutantDebuggerSton toString: context receiver
 ]
 
-{ #category : 'initialization' }
-MutantDebugger >> setContext: aContext [
-	context := aContext 
-]
-
 { #category : 'accessing' }
-MutantDebugger >> snapshotTaken [
-	^ STON fromString: sender
-]
-
-{ #category : 'as yet unclassified' }
 MutantDebugger >> stonSnapshot [
 
 	^ sender 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 MutantDebugger >> takeSender [
 
 	sender := self serializedSender
 ]
 
-{ #category : 'accessing' }
+{ #category : 'api' }
 MutantDebugger >> takeSnapshot [ 
 	self 
-		setContext: thisContext sender;
+		context: thisContext sender;
 		takeSender;
 		takeTemporaryVariables 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 MutantDebugger >> takeTemporaryVariables [
 
 	
 	temporaryVariables := STON toString: context temporaryVariables 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
+MutantDebugger >> takenSender [
+	^ STON fromString: sender
+]
+
+{ #category : 'accessing' }
 MutantDebugger >> temporaryVariables [ 
 
 	^ STON fromString: temporaryVariables 
