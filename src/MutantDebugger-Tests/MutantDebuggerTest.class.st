@@ -19,52 +19,54 @@ MutantDebuggerTest >> setUp [
 	"debugger sender: self class >> self selector"
 ]
 
+{ #category : 'running' }
+MutantDebuggerTest >> tearDown [
+	
+	MutantDebugger uniqueInstance snapshots removeAll.
+	super tearDown 
+]
+
 { #category : 'tests' }
-MutantDebuggerTest >> testCompareAndDetectChanges [
-	| acc |
-	acc := BankAccount withFunds: 200.
-	acc withdraw: 20.
-	self assert: acc balance equals: 181.
-	"debugger takeSnapshot: 13 hasMutation: false"
-	"debugger takeSnapshot: 13 hasMutation: true"
-	"cuando tengamos para comparar, guardamos las diferencias y borramos el STON grande"
-	"self assert: acc direction houseNumber equals: 12."
-	"self assert: ((acc instVarNamed: #direction) instVarName: #houseNumber) equals: 12"
+MutantDebuggerTest >> testMutationSnapshot [
+	| compiledMethod operator modifiedSource methodMutation testCase |
+	compiledMethod := BankAccount >> #deposit:.
+	testCase := BankAccountTest selector: #testPlusDeposit.
+	operator := MTReplacePlusWithMinusMutantOperator new.
+	modifiedSource := operator
+		                  modifiedSourceFor: compiledMethod
+		                  number: 1.
+	methodMutation := MDMethodMutation 
+		                  for: compiledMethod
+		                  using: operator
+		                  nodeNumber: 1
+		                  ofClass: BankAccount .
+	methodMutation testCaseReferences:
+		{ (MTTestCaseReference for: testCase) }.
+	methodMutation runMutantStoppingOnError: true in: nil.
+
+	self 
+		assert: (MutantDebugger uniqueInstance snapshots at: methodMutation at: testCase) sender 
+		equals: 'BankAccountTest{#testSelector:#testPlusDeposit,#account:BankAccount{#owner:'''',#funds:-300}}'
+]
+
+{ #category : 'tests' }
+MutantDebuggerTest >> testPutSnapshot [
+
+	| testCase |
+	testCase := MDTestSnapshotter new
+		mutant: self;
+		tearDown;
+		yourself.
+	
+	self 
+	assert: (MutantDebugger uniqueInstance snapshots at: self at: testCase) sender 
+	equals: (STON toString: testCase)
 ]
 
 { #category : 'tests' }
 MutantDebuggerTest >> testSerializedSender [
 	
-	| sender |
-	sender := debugger serializedSender.
+	debugger sender: self.
 	self 
-		assert: sender equals: (MutantDebuggerSton toString: self)
-]
-
-{ #category : 'tests' }
-MutantDebuggerTest >> testSnapshotTakesTempVariables [
-	| temp |
-	temp := 12.
-	debugger takeSnapshot. 
-	self assert: debugger temporaryVariables associations equals: { #temp -> 12 }
-]
-
-{ #category : 'tests' }
-MutantDebuggerTest >> testStonSnapshot [
-
-	debugger takeSnapshot.
-	self assert: debugger stonSnapshot equals: (MutantDebuggerSton toString: self)
-]
-
-{ #category : 'tests' }
-MutantDebuggerTest >> testTakenSender [
-
-	| sender |
-	sender := debugger 
-		takeSender;
-		takenSender.
-	self
-		deny: sender equals: self;
-		assert: sender class equals: self class;
-		assert: sender selector equals: self selector
+		assert: debugger serializedSender equals: (STON toString: self)
 ]

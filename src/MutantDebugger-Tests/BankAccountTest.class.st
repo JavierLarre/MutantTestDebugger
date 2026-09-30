@@ -29,6 +29,12 @@ BankAccountTest >> testInitialFunds [
 ]
 
 { #category : 'tests' }
+BankAccountTest >> testPlusDeposit [
+	account deposit: 100 + 200.
+	self assert: account balance equals: 300
+]
+
+{ #category : 'tests' }
 BankAccountTest >> testWithdraw [
 
 	account 
