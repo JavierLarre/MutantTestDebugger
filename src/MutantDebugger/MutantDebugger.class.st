@@ -5,9 +5,10 @@ Class {
 	#name : 'MutantDebugger',
 	#superclass : 'Object',
 	#instVars : [
-		'temporaryVariables',
 		'context',
-		'sender'
+		'sender',
+		'isCollecting',
+		'snapshots'
 	],
 	#classInstVars : [
 		'uniqueInstance'
@@ -30,60 +31,83 @@ MutantDebugger class >> withContext: aContext [
 		yourself
 ]
 
-{ #category : 'comparing' }
-MutantDebugger >> compareAndDetectChanges [
-	self context: thisContext sender.
-	self assert: sender = self serializedSender.
-	self assert: temporaryVariables = (MutantDebuggerSton toString: context temporaryVariables) 
-]
-
 { #category : 'initialization' }
 MutantDebugger >> context: aContext [
 	context := aContext 
+]
+
+{ #category : 'initialization' }
+MutantDebugger >> initialize [ 
+	super initialize.
+	context := thisContext.
+	isCollecting := false.
+	snapshots := Dictionary new.
+	sender := nil.
+]
+
+{ #category : 'accessing' }
+MutantDebugger >> newSnapshot [
+
+	^ MDSnapshot new
+		sender: self serializedSender;
+		temporaryVariables: self serializedTemporaries
+]
+
+{ #category : 'accessing' }
+MutantDebugger >> sender [
+
+	^ sender 
+]
+
+{ #category : 'accessing' }
+MutantDebugger >> sender: anObject [
+
+	sender := anObject
 ]
 
 { #category : 'accessing' }
 MutantDebugger >> serializedSender [
 
 	"todo: buscar método más eficiente"
-	^ MutantDebuggerSton toString: context receiver
+	^ STON toString: sender
 ]
 
 { #category : 'accessing' }
-MutantDebugger >> stonSnapshot [
+MutantDebugger >> serializedTemporaries [
 
-	^ sender 
+	^ STON toString: context temporaryVariables 
 ]
 
-{ #category : 'private' }
-MutantDebugger >> takeSender [
+{ #category : 'accessing' }
+MutantDebugger >> snapshots [
 
-	sender := self serializedSender
+	^ snapshots 
+]
+
+{ #category : 'as yet unclassified' }
+MutantDebugger >> startCollectingMutations [
+
+	isCollecting := true
+]
+
+{ #category : 'ston persistence' }
+MutantDebugger >> stonOn: aStonWriter [
+
+	| tempContext |
+	tempContext := context.
+	context := nil.
+	^ [ super stonOn: aStonWriter ] ensure: [ context := tempContext ] 
+]
+
+{ #category : 'as yet unclassified' }
+MutantDebugger >> stopCollectingMutations [
+
+	isCollecting := false
 ]
 
 { #category : 'api' }
-MutantDebugger >> takeSnapshot [ 
-	"tengo que recibir un mutant ID y saber si es con o sin mutante"
-	self 
-		context: thisContext sender;
-		takeSender;
-		takeTemporaryVariables 
-]
+MutantDebugger >> takeSnapshotFromMutant: aMethodMutation inTest: aTestCase [
 
-{ #category : 'private' }
-MutantDebugger >> takeTemporaryVariables [
-
-	
-	temporaryVariables := STON toString: context temporaryVariables 
-]
-
-{ #category : 'accessing' }
-MutantDebugger >> takenSender [
-	^ STON fromString: sender
-]
-
-{ #category : 'accessing' }
-MutantDebugger >> temporaryVariables [ 
-
-	^ STON fromString: temporaryVariables 
+	sender := aTestCase .
+	snapshots at: aMethodMutation at: aTestCase put: self newSnapshot
 ]
