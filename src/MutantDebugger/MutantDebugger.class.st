@@ -1,113 +1,64 @@
-"
-I take snapshots of objects before and after test execution to compare mutation differences
-"
 Class {
 	#name : 'MutantDebugger',
 	#superclass : 'Object',
 	#instVars : [
-		'context',
-		'sender',
-		'isCollecting',
+		'classesToMutate',
+		'testClasses',
 		'snapshots'
-	],
-	#classInstVars : [
-		'uniqueInstance'
 	],
 	#category : 'MutantDebugger',
 	#package : 'MutantDebugger'
 }
 
 { #category : 'accessing' }
-MutantDebugger class >> uniqueInstance [
+MutantDebugger >> classesToMutate [
 
-	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
+	^ classesToMutate
 ]
 
-{ #category : 'instance creation' }
-MutantDebugger class >> withContext: aContext [
+{ #category : 'accessing' }
+MutantDebugger >> classesToMutate: anObject [
 
-	^ self new
-		context: aContext;
-		yourself
-]
-
-{ #category : 'initialization' }
-MutantDebugger >> context: aContext [
-	context := aContext 
+	classesToMutate := anObject
 ]
 
 { #category : 'initialization' }
-MutantDebugger >> initialize [ 
+MutantDebugger >> initialize [
+
 	super initialize.
-	context := thisContext.
-	isCollecting := false.
-	snapshots := Dictionary new.
-	sender := nil.
+	snapshots := MDSnapshots uniqueInstance
+		             reset;
+		             yourself
+]
+
+{ #category : 'running' }
+MutantDebugger >> run [
+
+	| analysis inyector |
+	analysis := MTAnalysis new
+		            evaluationClass: MDMutantEvaluation;
+		            classesToMutate: classesToMutate;
+		            testClasses: testClasses;
+		            yourself.
+	inyector := MDSnapshotInyector fromTestClasses: testClasses.
+	snapshots stopCollectingMutations.
+
+	^ [
+		  inyector
+			  inyectCodeIntoTestCases;
+			  runInstrumentedTestCases.
+		  analysis run.
+		  snapshots ] ensure: [ inyector restoreTestCases ]
 ]
 
 { #category : 'accessing' }
-MutantDebugger >> newSnapshot [
+MutantDebugger >> testClasses [
 
-	^ MDSnapshot new
-		sender: self serializedSender;
-		temporaryVariables: self serializedTemporaries
+	^ testClasses
 ]
 
 { #category : 'accessing' }
-MutantDebugger >> sender [
+MutantDebugger >> testClasses: anObject [
 
-	^ sender 
-]
-
-{ #category : 'accessing' }
-MutantDebugger >> sender: anObject [
-
-	sender := anObject
-]
-
-{ #category : 'accessing' }
-MutantDebugger >> serializedSender [
-
-	"todo: buscar método más eficiente"
-	^ STON toString: sender
-]
-
-{ #category : 'accessing' }
-MutantDebugger >> serializedTemporaries [
-
-	^ STON toString: context temporaryVariables 
-]
-
-{ #category : 'accessing' }
-MutantDebugger >> snapshots [
-
-	^ snapshots 
-]
-
-{ #category : 'as yet unclassified' }
-MutantDebugger >> startCollectingMutations [
-
-	isCollecting := true
-]
-
-{ #category : 'ston persistence' }
-MutantDebugger >> stonOn: aStonWriter [
-
-	| tempContext |
-	tempContext := context.
-	context := nil.
-	^ [ super stonOn: aStonWriter ] ensure: [ context := tempContext ] 
-]
-
-{ #category : 'as yet unclassified' }
-MutantDebugger >> stopCollectingMutations [
-
-	isCollecting := false
-]
-
-{ #category : 'api' }
-MutantDebugger >> takeSnapshotFromMutant: aMethodMutation inTest: aTestCase [
-
-	sender := aTestCase .
-	snapshots at: aMethodMutation at: aTestCase put: self newSnapshot
+	testClasses := anObject
 ]

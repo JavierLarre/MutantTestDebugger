@@ -1,11 +1,12 @@
 Class {
-	#name : 'MutantDebuggerSton',
+	#name : 'MDSTON',
 	#superclass : 'STON',
 	#category : 'MutantDebugger',
 	#package : 'MutantDebugger'
 }
 
 { #category : 'accessing' }
-MutantDebuggerSton class >> writer [ 
-	^ MutantDebuggerStonWriter new
+MDSTON >> writer [
+
+	^ MDSTONWriter new
 ]

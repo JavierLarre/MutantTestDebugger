@@ -30,6 +30,7 @@ BankAccountTest >> testInitialFunds [
 
 { #category : 'tests' }
 BankAccountTest >> testPlusDeposit [
+
 	account deposit: 100 + 200.
 	self assert: account balance equals: 300
 ]
@@ -37,14 +38,14 @@ BankAccountTest >> testPlusDeposit [
 { #category : 'tests' }
 BankAccountTest >> testWithdraw [
 
-	account 
+	account
 		deposit: 100;
 		withdraw: 100.
-	self assert: account balance equals: 0 
+	self assert: account balance equals: 0
 ]
 
 { #category : 'tests' }
 BankAccountTest >> testWithdrawTooMuch [
 
-	self should: [ account withdraw: 1 ] raise: Error 
+	self should: [ account withdraw: 1 ] raise: Error
 ]
