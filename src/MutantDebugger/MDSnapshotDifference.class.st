@@ -51,11 +51,13 @@ MDSnapshotDifference >> generateAssert [
 	testCase := originalSnapshot sender.
 	ast := testCase class parseTreeForSelector: testCase selector.
 	methodName := testCase selector , 'SuggestedFrom' , mutation operator class name.
-	differentVariables := self differentVariables.
+	differentVariables := (MDSuggestedAssertions originalSender: testCase mutatedSender: mutatedSnapshot sender) differentVariables.
 	methodNode := Smalltalk compiler
 		              source:
 			              'test self assert: ' , (self accessorsFrom: differentVariables associations first variable: 'self') , ' equals: '
-			              , (self suggestionValue: differentVariables associations first from: originalSnapshot deserializedSender) printString;
+			              ,
+				              (self suggestionValue: differentVariables associations first from: originalSnapshot deserializedSender)
+					              printString;
 		              parse.
 	ast selector: methodName.
 	ast addNode: methodNode statements first.

@@ -6,9 +6,9 @@ Class {
 		'mutatedSender',
 		'differentVariables'
 	],
-	#category : 'MutantDebugger-Snapshot',
+	#category : 'MutantDebugger-Assertions',
 	#package : 'MutantDebugger',
-	#tag : 'Snapshot'
+	#tag : 'Assertions'
 }
 
 { #category : 'instance creation' }
@@ -23,6 +23,7 @@ MDSuggestedAssertions class >> originalSender: anObject mutatedSender: anotherOb
 { #category : 'accessing' }
 MDSuggestedAssertions >> differentVariables [
 
+	self searchDifferentVariables.
 	^ differentVariables
 ]
 
@@ -57,7 +58,7 @@ MDSuggestedAssertions >> originalSender: anObject [
 ]
 
 { #category : 'as yet unclassified' }
-MDSuggestedAssertions >> suggestedVariables [
+MDSuggestedAssertions >> searchDifferentVariables [
 
 	| differentNames |
 	originalSender species = mutatedSender species ifFalse: [ ^ differentVariables ].
@@ -68,7 +69,7 @@ MDSuggestedAssertions >> suggestedVariables [
 			differentVariables
 				at: instVarName
 				put:
-				(self class
-					 originalSender: (originalSender instVarNamed: instVarName)
-					 mutatedSender: (mutatedSender instVarNamed: instVarName)) suggestedVariables ]
+					(self class
+						 originalSender: (originalSender instVarNamed: instVarName)
+						 mutatedSender: (mutatedSender instVarNamed: instVarName)) differentVariables ]
 ]
