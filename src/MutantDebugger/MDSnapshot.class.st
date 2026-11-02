@@ -6,8 +6,9 @@ Class {
 		'sender',
 		'serializedSender'
 	],
-	#category : 'MutantDebugger',
-	#package : 'MutantDebugger'
+	#category : 'MutantDebugger-Snapshot',
+	#package : 'MutantDebugger',
+	#tag : 'Snapshot'
 }
 
 { #category : 'comparing' }

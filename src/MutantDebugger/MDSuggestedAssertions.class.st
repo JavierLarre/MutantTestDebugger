@@ -6,8 +6,9 @@ Class {
 		'mutatedSender',
 		'differentVariables'
 	],
-	#category : 'MutantDebugger',
-	#package : 'MutantDebugger'
+	#category : 'MutantDebugger-Snapshot',
+	#package : 'MutantDebugger',
+	#tag : 'Snapshot'
 }
 
 { #category : 'instance creation' }

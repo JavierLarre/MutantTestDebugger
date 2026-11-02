@@ -1,8 +1,9 @@
 Class {
 	#name : 'MDSTONReader',
 	#superclass : 'STONReader',
-	#category : 'MutantDebugger',
-	#package : 'MutantDebugger'
+	#category : 'MutantDebugger-STON',
+	#package : 'MutantDebugger',
+	#tag : 'STON'
 }
 
 { #category : 'parsing' }

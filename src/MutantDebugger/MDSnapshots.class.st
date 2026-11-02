@@ -15,8 +15,9 @@ Class {
 	#classInstVars : [
 		'uniqueInstance'
 	],
-	#category : 'MutantDebugger',
-	#package : 'MutantDebugger'
+	#category : 'MutantDebugger-Snapshot',
+	#package : 'MutantDebugger',
+	#tag : 'Snapshot'
 }
 
 { #category : 'class initialization' }

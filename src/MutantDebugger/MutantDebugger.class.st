@@ -6,8 +6,9 @@ Class {
 		'testClasses',
 		'snapshots'
 	],
-	#category : 'MutantDebugger',
-	#package : 'MutantDebugger'
+	#category : 'MutantDebugger-Facade',
+	#package : 'MutantDebugger',
+	#tag : 'Facade'
 }
 
 { #category : 'accessing' }

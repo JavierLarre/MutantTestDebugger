@@ -1,8 +1,9 @@
 Class {
 	#name : 'MDMutantEvaluation',
 	#superclass : 'MTMutantEvaluation',
-	#category : 'MutantDebugger',
-	#package : 'MutantDebugger'
+	#category : 'MutantDebugger-MuTalk',
+	#package : 'MutantDebugger',
+	#tag : 'MuTalk'
 }
 
 { #category : 'private' }

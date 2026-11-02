@@ -1,8 +1,9 @@
 Class {
 	#name : 'MDSTON',
 	#superclass : 'STON',
-	#category : 'MutantDebugger',
-	#package : 'MutantDebugger'
+	#category : 'MutantDebugger-STON',
+	#package : 'MutantDebugger',
+	#tag : 'STON'
 }
 
 { #category : 'accessing' }

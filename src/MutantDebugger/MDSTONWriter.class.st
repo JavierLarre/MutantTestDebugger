@@ -6,8 +6,9 @@ Class {
 		'variables',
 		'target'
 	],
-	#category : 'MutantDebugger',
-	#package : 'MutantDebugger'
+	#category : 'MutantDebugger-STON',
+	#package : 'MutantDebugger',
+	#tag : 'STON'
 }
 
 { #category : 'accessing' }

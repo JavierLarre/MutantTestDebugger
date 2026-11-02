@@ -6,8 +6,9 @@ Class {
 		'mutatedSnapshot',
 		'originalSnapshot'
 	],
-	#category : 'MutantDebugger',
-	#package : 'MutantDebugger'
+	#category : 'MutantDebugger-Snapshot',
+	#package : 'MutantDebugger',
+	#tag : 'Snapshot'
 }
 
 { #category : 'as yet unclassified' }
