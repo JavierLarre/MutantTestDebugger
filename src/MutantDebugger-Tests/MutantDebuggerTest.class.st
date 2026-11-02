@@ -9,6 +9,15 @@ Class {
 }
 
 { #category : 'tests' }
+MutantDebuggerTest >> testGenerateAsserts [
+
+	MutantDebugger new
+		classesToMutate: { BankAccount };
+		testClasses: { BankAccountTest };
+		generateAsserts
+]
+
+{ #category : 'tests' }
 MutantDebuggerTest >> testRun [
 
 	| snapshots |
@@ -16,5 +25,16 @@ MutantDebuggerTest >> testRun [
 		             classesToMutate: { BankAccount };
 		             testClasses: { BankAccountTest };
 		             run.
-	snapshots snapshotsDifferences inspect
+	snapshots inspect
+]
+
+{ #category : 'tests' }
+MutantDebuggerTest >> testSuggestedAsserts [
+
+	| differences |
+	differences := MutantDebugger new
+		               classesToMutate: { BankAccount };
+		               testClasses: { BankAccountTest };
+		               suggestedAsserts.
+	differences inspect
 ]

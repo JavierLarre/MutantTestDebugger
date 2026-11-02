@@ -8,6 +8,18 @@ Class {
 	#package : 'MutantDebugger-Tests'
 }
 
+{ #category : 'accessing' }
+BankAccountTest >> account [
+
+	^ account
+]
+
+{ #category : 'accessing' }
+BankAccountTest >> account: anObject [
+
+	account := anObject
+]
+
 { #category : 'running' }
 BankAccountTest >> setUp [
 	super setUp.
