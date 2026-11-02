@@ -6,7 +6,14 @@ Class {
 }
 
 { #category : 'accessing' }
-MDSTON >> writer [
+MDSTON class >> reader [
+
+	^ MDSTONReader new 
+]
+
+{ #category : 'accessing' }
+MDSTON class >> writer [
+	"Shortcut to create a new STONWriter instance"
 
 	^ MDSTONWriter new
 ]

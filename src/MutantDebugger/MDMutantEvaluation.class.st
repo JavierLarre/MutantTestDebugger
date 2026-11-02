@@ -6,14 +6,6 @@ Class {
 }
 
 { #category : 'private' }
-MDMutantEvaluation >> testResults [
-
-	"MDSnapshots uniqueInstance currentMutation: mutation.
-	^ [ super testResults ] ensure: [ MDSnapshots uniqueInstance stopCollectingMutations ]"
-	^ super testResults 
-]
-
-{ #category : 'private' }
 MDMutantEvaluation >> valueStoppingOnError: aBoolean [
 
 	MDSnapshots uniqueInstance currentMutation: mutation.

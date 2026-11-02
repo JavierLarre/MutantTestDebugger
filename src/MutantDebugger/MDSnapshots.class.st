@@ -57,6 +57,22 @@ MDSnapshots >> currentMutation: anObject [
 	currentMutation := anObject
 ]
 
+{ #category : 'as yet unclassified' }
+MDSnapshots >> differences [
+
+	| differences |
+	differences := Dictionary new.
+	mutatedSnapshots keysAndValuesDo: [ :mutation :snapshots |
+			snapshots keysAndValuesDo: [ :testCase :snapshot |
+					differences
+						at: mutation put: (MDSnapshotDifference new
+								 mutation: mutation;
+								 mutatedSnapshot: snapshot;
+								 originalSnapshot: (originalSnapshots at: testCase));
+						yourself ] ].
+	^ differences select: #isDifferent
+]
+
 { #category : 'initialization' }
 MDSnapshots >> initialize [
 
@@ -129,22 +145,6 @@ MDSnapshots >> serializedSender [
 MDSnapshots >> serializedTemporaries [
 
 	^ STON toString: context temporaryVariables 
-]
-
-{ #category : 'as yet unclassified' }
-MDSnapshots >> snapshotsDifferences [
-
-	| differences |
-	differences := Dictionary new.
-	mutatedSnapshots keysAndValuesDo: [ :mutation :snapshots |
-			snapshots keysAndValuesDo: [ :testCase :snapshot |
-					differences
-						at: mutation put: (MDSnapshotDifference new
-								 mutation: mutation;
-								 mutatedSnapshot: snapshot;
-								 originalSnapshot: (originalSnapshots at: testCase));
-						yourself ] ].
-	^ differences select: #isDifferent 
 ]
 
 { #category : 'as yet unclassified' }

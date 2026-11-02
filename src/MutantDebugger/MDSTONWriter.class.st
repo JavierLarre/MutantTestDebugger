@@ -26,7 +26,7 @@ MDSTONWriter >> hasBlacklistedVariable [
 MDSTONWriter >> initialize [
 
 	super initialize.
-	blacklist := Set newFrom: #( expectedFailures ).
+	blacklist := Set newFrom: #( expectedFails ).
 	variables := Dictionary new
 ]
 

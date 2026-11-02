@@ -22,6 +22,14 @@ MutantDebugger >> classesToMutate: anObject [
 	classesToMutate := anObject
 ]
 
+{ #category : 'as yet unclassified' }
+MutantDebugger >> generateAsserts [
+
+	| differences |
+	differences := self run.
+	differences do: #generateAssert
+]
+
 { #category : 'initialization' }
 MutantDebugger >> initialize [
 
@@ -36,6 +44,7 @@ MutantDebugger >> run [
 
 	| analysis inyector |
 	analysis := MTAnalysis new
+						mutantGenerationStrategy: MTAllMutantGenerationStrategy new;
 		            evaluationClass: MDMutantEvaluation;
 		            classesToMutate: classesToMutate;
 		            testClasses: testClasses;
@@ -48,7 +57,15 @@ MutantDebugger >> run [
 			  inyectCodeIntoTestCases;
 			  runInstrumentedTestCases.
 		  analysis run.
-		  snapshots ] ensure: [ inyector restoreTestCases ]
+		  snapshots differences ] ensure: [ inyector restoreTestCases ]
+]
+
+{ #category : 'as yet unclassified' }
+MutantDebugger >> suggestedAsserts [
+
+	| differences |
+	differences := self run.
+	^ differences collect: #differentVariables
 ]
 
 { #category : 'accessing' }

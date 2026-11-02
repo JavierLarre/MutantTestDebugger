@@ -77,5 +77,5 @@ MDSnapshotInyector >> testCases [
 MDSnapshotInyector >> testCases: aTestCaseCollection [
 
 	aTestCaseCollection do: [ :testCase | 
-		testCases at: testCase put: testCase class >> testCase selector ]
+		testCases at: testCase put: (testCase class lookupSelector: testCase selector) ]
 ]

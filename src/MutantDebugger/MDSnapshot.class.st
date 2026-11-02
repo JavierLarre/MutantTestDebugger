@@ -16,6 +16,12 @@ MDSnapshot >> = aSnapshot [
 	^ serializedSender = aSnapshot serializedSender and: [ temporaryVariables = aSnapshot temporaryVariables ]
 ]
 
+{ #category : 'as yet unclassified' }
+MDSnapshot >> deserializedSender [
+
+	^ MDSTON fromString: serializedSender 
+]
+
 { #category : 'initialization' }
 MDSnapshot >> initialize [
 
